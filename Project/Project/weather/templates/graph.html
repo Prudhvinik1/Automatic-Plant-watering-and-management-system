@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Dashboard</title>
+	<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+	<link href="{% static 'css/font-awesome.min.css' %}"rel="stylesheet">
+	<link href="{% static 'css/datepicker3.css'%}" rel="stylesheet">
+	<link href="{% static 'css/styles.css' %}" rel="stylesheet">
+	<link href="{% static 'css/font-styles/Montserrat.css' %}" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+	<link rel="stylesheet" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" href="{% static 'css/rain.css' %}">
+	<script src="{% static 'js/vendor/modernizr-2.6.2.min.js' %}"></script>
+	<script src="{% static 'js/Chart.bundle.js' %}"></script>
+    	<script src="{% static 'js/utils.js' %}"></script>
+    	<style>
+    		canvas {
+       			-moz-user-select: none;
+        		-webkit-user-select: none;
+        		-ms-user-select: none;
+    		}
+    		
+		
+
+		.button {
+		
+			position: relative;
+			display: block;
+			background: none center center no-repeat;
+			background-size: cover;
+			border: 2px solid #2e2e2e;
+			text-transform: uppercase;
+			letter-spacing: .3rem;
+			padding: 20px 15px;
+			text-align: center;
+			max-width: 270px;
+			min-width: 200px;
+			cursor: pointer;
+			overflow: hidden;
+			-webkit-transition: border 1s cubic-bezier(0.19,1,.22,1),color .6s cubic-bezier(0.19,1,.22,1);
+			transition: border 1s cubic-bezier(0.19,1,.22,1), color .6s cubic-bezier(0.19,1,.22,1), background 5s cubic-bezier(0.19,1,.22,1);
+		}
+
+		.button a {
+			color: #969696;
+			font-family: 'Varela Round';
+			text-decoration: none;
+		}
+
+		.button .mask {
+			background: #fff;
+			background: rgba(255,255,255,0.5);
+		}
+
+		.button .mask {
+			position: absolute;
+			display: block;
+			width: 200px;
+			height: 100px;
+			-webkit-transform: translate3d(-120%,-50px,0) rotate3d(0,0,1,45deg);
+			transform: translate3d(-120%,-50px,0) rotate3d(0,0,1,45deg);
+			-webkit-transition: all 1.1s cubic-bezier(0.19,1,.22,1);
+			transition: all 1.1s cubic-bezier(0.19,1,.22,1);
+		}
+
+		.button .shift {
+			-webkit-transition: all 1.1s cubic-bezier(0.19,1,.22,1);
+			transition: all 1.1s cubic-bezier(0.19,1,.22,1);
+		}
+
+		.button:hover {
+			border-color: #fff;
+			/* box-shadow: 0 0 5px rgba(255,245,245,0.8); */
+			/* background-image: url('http://cuinine.com/img/codepen/savvy.jpg'); */
+		}
+
+		.button:hover a {
+			color: #fff;
+		}
+
+		.button:hover .mask {
+			background: #fff;
+			-webkit-transform: translate3d(120%,-100px,0) rotate3d(0,0,1,90deg);
+			transform: translate3d(120%,-100px,0) rotate3d(0,0,1,90deg);
+		}
+
+		.button:hover .shift {
+			padding-left: 5px;
+		}
+    	</style>
+    <script src="{% static 'js/RGraph.common.core.js' %}" ></script>
+    <script src="{% static 'js/RGraph.common.dynamic.js' %}" ></script>
+    <script src="{% static 'js/RGraph.semicircularprogress.js' %}" ></script>
+    <script src="{% static 'js/RGraph.thermometer.js' %}" ></script>
+    <script>
+    	fetch('/numplants/').then(res => res.json()).then(id => {
+    		let list = id.pid.map(d => `<a class="dropdown-item" href='/dash/${d}' style="color:black;font-size:20px;text-decoration:none;">Plant ${d}<hr></a>`).join('')
+    		document.querySelector('#getbutton').innerHTML = `
+    			${list}
+    			<a class="dropdown-item" href="{% url 'weather:addplant' %}" style="color:black;font-size:20px;text-decoration:none;">ADD PLANT&emsp;<em class="fa fa-plus"></em></a>
+    		`
+    	})
+    </script>
+</head>
+<body>
+	<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse"><span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span></button>
+				<a class="navbar-brand"><span>Plant</span>Monitoring</a>
+				<div class = "btn-group pull-right">
+				<button class="navbar-brand pull-right btn btn-primary dropdown-toggle" align="center" type="button" data-toggle="dropdown">
+				<em class="fa fa-info"></em> Plant info
+				</button>
+				<div class="dropdown-menu" id="getbutton">
+					
+				</div>
+				</div>
+			 </div>
+	</nav>
+	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		<div class="profile-sidebar">
+			<div class="profile-userpic">
+				<img src="{% static 'images/plant.png' %}" class="img-responsive" alt="">
+			</div>
+			<div class="profile-usertitle" style="padding-top:10px;">
+				{% if user.is_authenticated %}
+					<div class="profile-usertitle-name">{{ request.user.username }}</div>
+				{% else %}
+					<div class="profile-usertitle-name">Not Loggedin</div>
+				{% endif %}
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="divider"></div>
+		<ul class="nav menu">
+			<li class="active"><a><em class="fa fa-dashboard">&nbsp;</em> Dashboard</a></li>
+			<li><a href="{% url 'weather:map' %}"><em class="fa fa-map">&nbsp;</em> Map</a></li>
+			<li><a href="{% url 'weather:logout' %}"><em class="fa fa-power-off" >&nbsp;</em> Logout</a></li>
+		</ul>
+		<hr>
+		<div class = "rain1">
+			<p style="font-size:25px;color:black">Weather Condition:</p>
+			{% if weather.check == "no rain" %}
+			<div class="icon sunny">
+			  	<div class="sun">
+			  	  <div class="rays"></div>
+			  	</div>
+			</div>
+			{% else %}
+		
+			<div class="icon rainy">
+				<div class="cloud"></div>
+		  		<div class="rain"></div>
+			</div>
+			{% endif %}
+		</div>
+
+	</div><!--/.sidebar-->
+	<!--div id="demo-content">
+		<div id="loader-wrapper">
+			<div id="loader"></div>
+			<div class="loader-section section-left"></div>
+            		<div class="loader-section section-right"></div>
+		</div>
+	</div-->
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#">
+					<em class="fa fa-home" style="color:blue"></em>
+				</a></li>
+				<li class="active">Dashboard</li>
+			</ol>
+		</div><!--/.row-->
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">Dashboard</h1>
+			</div>
+		</div><!--/.row-->
+		
+		
+		
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default chat">
+					<div class="panel-heading"><b>TEMPATATURE</b><span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+					<div class="panel-body" id="tempa">
+						<form class="form-horizontal">
+							<div class="form-group">
+							  <!--label class="col-sm-2 control-label">Temp:-</label-->
+							  <div class="col-sm-15">
+								<input class="form-control" id="temp" type="text" >
+							  </div>
+							</div>
+						</form>
+			     	</div><center><canvas id="cvs1" width="100" height="400">[No canvas support]</canvas></center>
+				</div>
+			</div><!--/.col-->
+	
+			<div class="col-md-6">
+				<div class="panel panel-default chat">
+					<div class="panel-heading"><b>HUMIDITY</b><span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+					<div class="panel-body" id ="humi">
+						<form class="form-horizontal">
+							<div class="form-group">
+							  <!--label class="col-sm-2 control-label">Humidity:-</label-->
+							  <div class="col-sm-15">
+								<input class="form-control" id="hum" type="text" >
+							  </div>
+							</div>
+						</form>
+			     	</div><center><canvas id="cvs" width="300" height="300">[No canvas support]</canvas></center><br><br><br><br><br>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			
+			<div class="col-md-12">
+				<div class="panel panel-default chat">
+					<div class="panel-heading">
+						<b>WATER LEVEL</b><span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+					<div class="panel-body" id ="water">
+						<form class="form-horizontal">
+							<div class="form-group">
+							  <!--label class="col-sm-2 control-label">Water:-</label-->
+							  <div class="col-sm-15">
+								<input class="form-control" id="Level" type="text">
+							  </div>
+							</div>
+						</form>
+			     		</div>
+				</div>
+			</div>
+		</div>
+		<div id = "graph">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Temperature and Humidity graph
+							<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+							<div class="panel-body">
+								<div style="width:100%;">
+        								<canvas id="canvas">[No canvas support]</canvas>
+    								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+		<div class = "row">
+			<div class = "col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-body" style ="background-color:black;" >
+						<center>
+							<h6 style="color:white;font-size:25px">MOTORS</h6>
+							<a onclick="changediv1()" style="text-decoration:none"><div class="button">
+								AUTOMATIC <span class="shift">›</span>
+								<div class="mask"></div>
+							</div></a>
+							<br><br>
+							<a onclick="changediv2()" style="text-decoration:none"><div class="button">
+								MANUAL <span class="shift">›</span>
+								<div class="mask"></div>
+							</div></a><br><br>
+							<span style="color:white;font-size:20px">STATUS OF ACTUATOR: <span id="actuator">AUTO</span></span>
+						</center>	
+					</div>
+				</div>	
+			</div>
+				
+		</div>
+	</div>	
+	<script>
+		function changediv1()
+		{
+			document.getElementById("actuator").innerHTML = "AUTO"
+		}
+		function changediv2()
+		{
+			document.getElementById("actuator").innerHTML = document.getElementById("actuator").innerHTML == "OFF" ?  "ON" : "OFF"
+		}
+	</script>
+ 		
+	<script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+	<script src="{% static 'js/custom.js' %}"></script>
+	
+
+
+
+	<script>
+		document.querySelector('#temp').value = {{weather.temperature}}
+		document.querySelector('#hum').value = {{weather.humidity}}
+		document.querySelector('#Level').value = {{level.water_level}}
+	</script>	
+	
+	
+	<script>
+		new RGraph.SemiCircularProgress({
+		    id: 'cvs',
+		    min: 0,
+		    max: 100,
+		    value: {{weather.humidity}},
+		    options: {
+		        gutterTop: 10,
+		        gutterLeft: 10,
+		        gutterRight: 10,
+		        adjustable: true,
+		        unitsPost: '%',
+		        textAccessiblePointerevents: false,
+		        colors: ['Gradient(white:#0a0)']
+		    }
+		}).draw();
+		new RGraph.Thermometer({
+		    id: 'cvs1',
+		    min: 0,
+		    max: 100,
+		    value: {{weather.temperature}},
+		    options: {
+		        scaleVisible: true
+		    }
+		}).draw();
+    </script>	
+	<script>
+		function goTOP() {
+			document.body.scrollTop = 0;
+			document.documentElement.scrollTop = 0;
+		}
+	</script>
+	<script>
+		    var lineChartData = {
+			labels: ["1","2","3","4","5","6","7","8","9","10"],
+			datasets: [{
+			    label: "Temperature",
+			    borderColor: window.chartColors.red,
+			    backgroundColor: window.chartColors.red,
+			    fill: false,
+			    data: {{json_temp|safe}},
+			    yAxisID: "y-axis-1",
+			}, {
+			    label: "Humidity",
+			    borderColor: window.chartColors.blue,
+			    backgroundColor: window.chartColors.blue,
+			    fill: false,
+			    data: {{json_humid|safe}},
+			    yAxisID: "y-axis-1"
+			}]
+		    };
+		    window.onload = function() {
+			var ctx = document.getElementById("canvas").getContext("2d");
+			window.myLine = Chart.Line(ctx, {
+			    data: lineChartData,
+			    options: {
+				responsive: true,
+				hoverMode: 'index',
+				stacked: false,
+				scales: {
+				    yAxes: [{
+				        type: "linear",
+				        display: true,
+				        position: "left",
+				        id: "y-axis-1",
+				    }],
+				}
+			    }
+			});
+		    };
+	</script>
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<!--script>window.jQuery || document.write("<script src='{% static 'js/vendor/jquery-1.9.1.min.js' %}'></script>")</script-->
+	<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

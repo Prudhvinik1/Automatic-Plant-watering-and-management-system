@@ -1,0 +1,89 @@
+{% load staticfiles %}
+<html>
+<body>
+<style>
+.previous {
+    background-color: #f1f1f1;
+    color: black;
+    font-size:28px;
+}
+.defaultTextBox {
+    padding: 0;
+    height: 30px;
+    position: relative;
+    left: 0;
+    outline: none;
+    border: 2px solid #cdcdcd;
+    border-color: rgba(0,3,0,2.15);
+    background-color: white;
+    font-size: 16px;
+}
+.advancedSearchTextbox {
+    width: 152px;
+    margin-right: -4px;
+}
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+.button2:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.buttone {
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.buttone:hover {background-color: #3e8e41}
+
+.buttone:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+p {
+  color: white;
+  font-size: 30px;
+}
+</style>
+<body background="{% static 'images/addplant.jpg' %}">
+	<button class="button button2" onclick="window.open('{% url 'weather:dashboard' %}', '_self')">&laquo; Go  back</button>
+
+	<center>
+	<br><br><br><br><br><br><br><br>
+	<form method="POST">
+		<p>PLANT NAME:</p>
+		<input type="text" class="defaultTextBox advancedSearchTextBox" name="a1" required><br>
+		<p>LATITUDE:</p>
+		<input type="text" class="defaultTextBox advancedSearchTextBox" name="a2" required><br>
+		<p>LONGITUDE:</p>
+		<input type="text" class="defaultTextBox advancedSearchTextBox" name="a3" required><br>
+		<br><br>
+		<button class="buttone" typr="submit">Submit</button>
+	</form> 
+	</center>
+	</body>
+</html>
+
+
+
