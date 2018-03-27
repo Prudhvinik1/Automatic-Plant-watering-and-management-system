@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+	<head> 
+		<link rel="stylesheet" type="text/css" href="{% static 'css/component.css' %}" />
+		<script src="{% static 'js/modernizr.custom1.js' %}"></script>
+		
+		<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+		<link href="{% static 'css/font-styles/opensans.css' %}" rel='stylesheet' type='text/css'>
+    		<link href="{% static 'css/font-styles/PT.css' %}" rel='stylesheet' type='text/css'>
+    
+		
+	<style>
+		#icon {
+		  color:white;
+		}
+		h4 {
+		  color:purple;
+		}
+		.button {
+		  display: inline-block;
+		  border-radius: 4px;
+		  border: none;
+		  text-align: center;
+		  font-size: 10px;
+		  padding-top: 17px;
+		  width: 200px;
+		  transition: all 0.5s;
+		  cursor: pointer;
+		  margin: 5px;
+		}
+		.button1 {
+		  background-color:;
+		  color:;
+		}
+		.button2 {
+		  background-color:;
+		  color:;
+		}
+		.button p {
+		  cursor: pointer;
+		  display: inline-block;
+		  position: relative;
+		  transition: 0.5s;
+		}
+		.button p:after {
+		  content: '\00bb';
+		  position: absolute;
+		  opacity: 0;
+		  top: 0;
+		  right: -20px;
+		  transition: 0.5s;
+		}
+		.button:hover p {
+		  padding-right: 25px;
+		}
+		.button:hover p:after {
+		  opacity: 1;
+		  right: 0;
+		}
+	</style>
+	</head>
+	<body>
+		
+			<div id="bl-main" class="bl-main">
+				<section>
+					<div class="bl-box">
+						<link rel="stylesheet" type="text/css" href="{% static 'css/default.css' %}" />
+						<link rel="stylesheet" type="text/css" href="{% static 'css/style2.css' %}" />
+						<div class="main clearfix">
+							<div class="circle">
+								<h1 style="font-size:27px">GROUP-24</h1>
+							</div>
+						</div>
+					</div>
+					<!--div class="bl-content">
+						<center>
+							<h2 id="icon" class="bl-icon bl-icon-blog">LET'S GET STARTED</h2><br><br>
+							<a href="{% url 'weather:login' %}">
+								<button class="button button1" style="vertical-align:middle;border-radius:5%"><p style="font-size:30px">SIGN IN </p></button>
+							</a>
+							<a href="{% url 'weather:register' %}">
+								<button class="button button2" style="vertical-align:middle;border-radius:5%"><p style="font-size:30px">SIGN UP </p></button>
+							</a>
+						</center>
+					</div-->
+					<span id="icon" class="bl-icon bl-icon-close"></span>
+				</section>
+				<section>
+					<div class="bl-box">
+						<h2 id="icon" class="bl-icon bl-icon-contact">Contact Us</h2>
+					</div>
+					<div class="bl-content">
+						<section id="speakers">
+							<h4 style = "font-size:50px">OUR TEAM</h4> <!-- Section Title -->
+							<div class="container">
+								<!-- First Row of Speakers -->
+								<div class="row1">
+									<div class="col-md-4">
+											<div class="unhover_img">
+											<img src="{% static 'images/rohit.jpg' %}" alt="" />
+											</div>
+											<div class="hover_img">
+											<img src="{% static 'images/rohit.jpg' %}" alt="" />
+											</div><br><br>
+											<h4><span>Rohit</span>Chowdary</h4>
+									</div>
+									<div class="col-md-4">
+											<div class="unhover_img">
+											<img src="{% static 'images/chaitu.jpg' %}" alt="" />
+											</div>
+											<div class="hover_img">
+											<img src="{% static 'images/chaitu.jpg' %}" alt="" />
+											</div><br><br>
+											<h4><span>B S N V</span>Chaitanya</h4>
+									</div>
+									<div class="col-md-4">
+											<div class="unhover_img">
+											<img src="{% static 'images/pandu.jpg' %}" alt="" />
+											</div>
+											<div class="hover_img">
+											<img src="{% static 'images/pandu.jpg' %}" alt="" />
+											</div><br><br>
+											<h4><span>Prasanna</span>Kumar</h4>
+									</div>
+								</div>
+								<div class="row1">
+									<div class="col-md-4">
+											<div class="unhover_img">
+											<img src="{% static 'images/saiteja.jpg' %}" alt="" />
+											</div>
+											<div class="hover_img">
+											<img src="{% static 'images/saiteja.jpg' %}" alt="" />
+											</div><br><br>
+											<h4><span>SaiTeja</span>Avadhoota</h4>
+									</div>
+									<div class="col-md-4">
+											<div class="unhover_img">
+											<img src="{% static 'images/prudhvi.jpg' %}" alt="" />
+											</div>
+											<div class="hover_img">
+											<img src="{% static 'images/prudhvi.jpg' %}" alt="" />
+											</div><br><br>
+											<h4><span>Prudhvi</span>Nikku</h4>
+									</div>
+									<div class="col-md-4">
+											<div class="unhover_img">
+											<img src="{% static 'images/veda.jpg' %}" alt="" />
+											</div>
+											<div class="hover_img">
+											<img src="{% static 'images/veda.jpg' %}" alt="" />
+											</div><br><br>
+											<h4><span>Veda</span>Barrenkala</h4>
+									</div>
+								</div>
+						</section>
+					</div>
+					<span id="icon" class="bl-icon bl-icon-close"></span>
+				</section>
+				<!--section>
+					<div class="bl-box">
+						<h2 id="icon" class="bl-icon bl-icon-about">Sensor info</h2>
+					</div>
+					<div class="bl-content">
+						
+					</div>
+					<span id="icon" class="bl-icon bl-icon-close"></span>
+				</section-->
+						<section>
+					<div class="bl-box">
+							<h2 id="icon" class="bl-icon bl-icon-blog">LET'S GET STARTED</h2>
+					</div>
+					<div class="bl-content">
+						<center>
+							<h2 id="icon" class="bl-icon bl-icon-blog">LET'S GET STARTED</h2><br><br>
+							<a href="{% url 'weather:login' %}">
+								<button class="button button1" style="vertical-align:middle;border-radius:5%"><p style="font-size:30px">SIGN IN </p></button>
+							</a>
+							<a href="{% url 'weather:register' %}">
+								<button class="button button2" style="vertical-align:middle;border-radius:5%"><p style="font-size:30px">SIGN UP </p></button>
+							</a>
+						</center>
+					</div>
+					<span id="icon" class="bl-icon bl-icon-close"></span>
+				</section>
+		
+			</div>
+			<!-- /container -->
+		<script src="{% static 'js/jquery_min.js' %}"></script>
+		<script src="{% static 'js/boxlayout.js' %}"></script>
+		<script>
+			$(function() {
+				Boxlayout.init();
+			});
+		</script>
+		<script>
+			$(document).ready(function(){
+			  $(".fadeIn").click(function(){
+				$("div.row2").fadeIn();
+				$("button.fadeIn").hide();
+			  });
+			});
+		</script>
+	</body>
+</html>
