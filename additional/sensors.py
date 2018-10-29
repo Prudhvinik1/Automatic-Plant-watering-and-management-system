@@ -2,6 +2,7 @@ import requests, json
 import Adafruit_DHT
 import sys, mcp3008
 import motor
+import sys
 import time
 from ultra_sonic_sensor import get_distance
 from motor import run_motor
